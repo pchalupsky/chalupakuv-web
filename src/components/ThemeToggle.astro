@@ -1,30 +1,30 @@
----
-import { useState, useEffect } from 'astro/jsx-runtime';
+<button id="theme-toggle" class="theme-toggle">
+  Přepnout režim
+</button>
 
-const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+<script>
+  const btn = document.getElementById('theme-toggle');
 
-useEffect(() => {
+  function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem('theme', theme);
+  }
+
+  // Inicializace
   const stored = localStorage.getItem('theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const initial = stored === 'light' || stored === 'dark'
-    ? stored
-    : prefersDark ? 'dark' : 'light';
+  const initial = stored || (prefersDark ? 'dark' : 'light');
+  applyTheme(initial);
 
-  setTheme(initial);
-  document.documentElement.dataset.theme = initial;
-}, []);
+  btn.textContent = initial === 'dark' ? '☀️ Světlý' : '🌙 Tmavý';
 
-function toggle() {
-  const next = theme === 'dark' ? 'light' : 'dark';
-  setTheme(next);
-  document.documentElement.dataset.theme = next;
-  localStorage.setItem('theme', next);
-}
----
-
-<button type="button" onClick={toggle} class="theme-toggle">
-  {theme === 'dark' ? '☀️ Světlý' : '🌙 Tmavý'}
-</button>
+  btn.addEventListener('click', () => {
+    const current = document.documentElement.dataset.theme;
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+    btn.textContent = next === 'dark' ? '☀️ Světlý' : '🌙 Tmavý';
+  });
+</script>
 
 <style>
   .theme-toggle {
