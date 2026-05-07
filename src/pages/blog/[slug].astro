@@ -1,0 +1,65 @@
+---
+import Layout from '../../components/Layout.astro';
+import PostHeader from '../../components/PostHeader.astro';
+import Gallery from '../../components/Gallery.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props;
+const { data, body } = post;
+---
+
+<Layout title={`${data.title} · Chalupákův web`}>
+  <PostHeader title={data.title} date={data.date} tags={data.tags} />
+
+  {data.image && (
+    <img
+      src={`/img/${data.image}`}
+      alt={data.title}
+      class="hero"
+      loading="lazy"
+      onerror="this.src='/img/placeholder.jpg';"
+    />
+  )}
+
+  <article class="content">
+    {body}
+  </article>
+
+  <Gallery images={data.gallery} />
+</Layout>
+
+<style>
+  .hero {
+    width: 100%;
+    max-height: 360px;
+    object-fit: cover;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+  }
+  .content :global(h1) {
+    font-size: 1.6rem;
+  }
+  .content :global(h2) {
+    font-size: 1.3rem;
+    margin-top: 1.5rem;
+  }
+  .content :global(p) {
+    line-height: 1.6;
+  }
+  .content :global(mark) {
+    background: rgba(250, 204, 21, 0.2);
+    padding: 0 0.15em;
+  }
+  .content :global(ul) {
+    padding-left: 1.2rem;
+  }
+</style>
