@@ -1,0 +1,37 @@
+---
+const { title, date, tags } = Astro.props;
+---
+
+<header class="post-header">
+  <a href="/blog" class="back">← Zpět na blog</a>
+  <h1>{title}</h1>
+  <p class="meta">
+    Publikováno: {new Date(date).toLocaleDateString('cs-CZ')}
+    {tags && tags.length ? ` · ${tags.join(', ')}` : ''}
+  </p>
+</header>
+
+<style>
+  .post-header {
+    margin-bottom: 1.5rem;
+  }
+  .back {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: var(--muted);
+  }
+  .back:hover {
+    color: var(--text);
+  }
+  h1 {
+    margin: 0 0 0.25rem;
+    font-size: 1.8rem;
+  }
+  .meta {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+</style>

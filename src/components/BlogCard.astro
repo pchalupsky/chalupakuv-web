@@ -1,0 +1,43 @@
+---
+const { post } = Astro.props;
+const { data, slug } = post;
+---
+
+<article class="card">
+  <a href={`/blog/${slug}/`} class="card-link">
+    <h2>{data.title}</h2>
+    <p class="excerpt">{data.excerpt}</p>
+    <p class="meta">
+      {new Date(data.date).toLocaleDateString('cs-CZ')}
+      {data.tags && data.tags.length ? ` · ${data.tags.join(', ')}` : ''}
+    </p>
+  </a>
+</article>
+
+<style>
+  .card {
+    background: var(--bg-elevated);
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+  }
+  .card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.2rem;
+  }
+  .excerpt {
+    margin: 0 0 0.5rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .meta {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+</style>

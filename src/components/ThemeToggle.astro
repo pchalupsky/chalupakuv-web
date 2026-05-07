@@ -1,0 +1,39 @@
+---
+import { useState, useEffect } from 'astro/jsx-runtime';
+
+const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+
+useEffect(() => {
+  const stored = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const initial = stored === 'light' || stored === 'dark'
+    ? stored
+    : prefersDark ? 'dark' : 'light';
+
+  setTheme(initial);
+  document.documentElement.dataset.theme = initial;
+}, []);
+
+function toggle() {
+  const next = theme === 'dark' ? 'light' : 'dark';
+  setTheme(next);
+  document.documentElement.dataset.theme = next;
+  localStorage.setItem('theme', next);
+}
+---
+
+<button type="button" onClick={toggle} class="theme-toggle">
+  {theme === 'dark' ? '☀️ Světlý' : '🌙 Tmavý'}
+</button>
+
+<style>
+  .theme-toggle {
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+</style>
